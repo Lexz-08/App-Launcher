@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App Launcher", "App Launcher.csproj", "{142FE483-F160-41C4-BED4-2789B9B90CBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{142FE483-F160-41C4-BED4-2789B9B90CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142FE483-F160-41C4-BED4-2789B9B90CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142FE483-F160-41C4-BED4-2789B9B90CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142FE483-F160-41C4-BED4-2789B9B90CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFDA3835-AE0E-4F8A-B26E-969FBF6607B3}
+	EndGlobalSection
+EndGlobal
