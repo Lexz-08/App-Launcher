@@ -29,6 +29,8 @@ namespace App_Launcher
 		[DllImport("user32.dll")]
 		private static extern int SendMessage(IntPtr hwnd, int msg, int wp, int lp);
 
+		private Ini config = null;
+
 		private void DragWindow(object sender, MouseButtonEventArgs e)
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
@@ -74,11 +76,13 @@ namespace App_Launcher
 			if (WindowState == WindowState.Maximized)
 			{
 				Maximize.Content = "2";
+				Maximize.ToolTip = "Restore";
 				ContentWindow.Padding = new Thickness(8);
 			}
 			else if (WindowState == WindowState.Normal)
 			{
 				Maximize.Content = "1";
+				Maximize.ToolTip = "Maximize";
 				ContentWindow.Padding = new Thickness(0);
 			}
 		}
@@ -179,21 +183,21 @@ namespace App_Launcher
 				}
 			}
 			
-			Ini loader = new Ini(Environment.CurrentDirectory + "\\config.ini");
+			config = new Ini(Environment.CurrentDirectory + "\\config.ini");
 
-			string[] categories = loader.GetSectionNames();
+			string[] categories = config.GetSectionNames();
 			
 			foreach (string category in categories)
 			{
 				ListBoxItem categoryItem = CreateCategory(category);
-				string[] programs = loader.GetEntryNames(category);
+				string[] programs = config.GetEntryNames(category);
 				List<ListBoxItem> programItems = new List<ListBoxItem>();
 
 				categoryItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectCategory);
 
 				foreach (string program in programs)
 				{
-					ListBoxItem programItem = CreateItem(program, loader.GetValue(category, program).ToString());
+					ListBoxItem programItem = CreateItem(program, config.GetValue(category, program).ToString());
 					programItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectProgram);
 
 					programItems.Add(programItem);
