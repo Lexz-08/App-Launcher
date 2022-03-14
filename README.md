@@ -39,4 +39,4 @@ This example here will create 2 different categories each with a pair of 2 diffe
 Also, clicking on a list item representing a program will launch it using the file path stored in the program after being loaded from the .ini file.
 
 ### Download
-[Standalone](https://github.com/Lexz-08/App-Launcher/releases/download/1.0/AppLauncher.exe)
+[Standalone](https://github.com/Lexz-08/App-Launcher/releases/download/1.0/Standalone.zip)
