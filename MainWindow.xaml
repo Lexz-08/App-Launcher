@@ -8,6 +8,8 @@
 		
         x:Name="AppLauncher"
 		Title="App Launcher"
+		MinHeight="350"
+		MinWidth="625"
 		Height="450"
 		Width="800"
 		
@@ -15,7 +17,7 @@
 	<WindowChrome.WindowChrome>
 		<WindowChrome UseAeroCaptionButtons="False" CaptionHeight="0" />
 	</WindowChrome.WindowChrome>
-	<Border>
+	<Border x:Name="ContentWindow">
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="30" />
@@ -49,9 +51,11 @@
 							Focusable="False"
 							Background="Transparent"
 							BorderThickness="0"
-							ToolTip="Minimize"/>
+							ToolTip="Minimize"
+							PreviewMouseLeftButtonDown="MinimizeWindow"/>
 
-					<Button Content="1"
+					<Button x:Name="Maximize"
+							Content="1"
 							FontFamily="Webdings"
 							FontSize="12"
 							Grid.Column="2"
@@ -59,7 +63,8 @@
 							Focusable="False"
 							Background="Transparent"
 							BorderThickness="0"
-							ToolTip="Maximize"/>
+							ToolTip="Maximize"
+							PreviewMouseLeftButtonDown="MaximizeWindow"/>
 
 					<Button Content="r"
 							FontFamily="Webdings"
@@ -69,7 +74,8 @@
 							Focusable="False"
 							Background="Transparent"
 							BorderThickness="0"
-							ToolTip="Close"/>
+							ToolTip="Close"
+							PreviewMouseLeftButtonDown="CloseWindow"/>
 				</Grid>
 			</Border>
 

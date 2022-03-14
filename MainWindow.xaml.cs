@@ -38,6 +38,51 @@ namespace App_Launcher
 			}
 		}
 
+		private void CloseWindow(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+				Application.Current.Shutdown();
+		}
+
+		private void MaximizeWindow(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				if (WindowState == WindowState.Maximized)
+				{
+					WindowState = WindowState.Normal;
+					Maximize.Content = "1";
+				}
+				else if (WindowState == WindowState.Normal)
+				{
+					WindowState = WindowState.Maximized;
+					Maximize.Content = "2";
+				}
+			}
+		}
+
+		private void MinimizeWindow(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+				WindowState = WindowState.Minimized;
+		}
+
+		protected override void OnStateChanged(EventArgs e)
+		{
+			base.OnStateChanged(e);
+
+			if (WindowState == WindowState.Maximized)
+			{
+				Maximize.Content = "2";
+				ContentWindow.Padding = new Thickness(8);
+			}
+			else if (WindowState == WindowState.Normal)
+			{
+				Maximize.Content = "1";
+				ContentWindow.Padding = new Thickness(0);
+			}
+		}
+
 		private ListBoxItem CreateItem(string Title, string Path)
 		{
 			ListBoxItem listItem = new ListBoxItem();
