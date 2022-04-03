@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -67,6 +68,87 @@ namespace App_Launcher
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
 				WindowState = WindowState.Minimized;
+		}
+
+		private void AddCategory(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				CategoryPrompt categoryPrompt = new CategoryPrompt
+				{
+					Owner = this,
+				};
+				categoryPrompt.Closed += (s, ee) =>
+				{
+					if (categoryPrompt.PromptSucceeded() && categoryPrompt.ConfirmClicked)
+					{
+						string categoryName = categoryPrompt.GetCategoryName();
+						ListBoxItem categoryItem = CreateCategory(categoryName);
+
+						Categories.Items.Add(categoryItem);
+						programs.Add(categoryItem, new List<ListBoxItem>());
+
+						string configInfo = string.Empty;
+						using (StreamReader reader = new StreamReader(config.Name))
+						{
+							configInfo = reader.ReadToEnd();
+							reader.Close();
+						}
+						using (StreamWriter writer = new StreamWriter(config.Name))
+						{
+							writer.WriteLine($"{configInfo}\n[{categoryName}]");
+							writer.Close();
+						}
+
+						categoryItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectCategory);
+						categoryItem.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ModifyCategory);
+
+						currentCategory = categoryItem;
+						LoadPrograms();
+					}
+					else
+					{
+						MessageBox.Show("Could not add category because no information was specified.", "No Category Information Given",
+							MessageBoxButton.OK, MessageBoxImage.Error);
+					}
+				};
+				categoryPrompt.ShowDialog();
+			}
+		}
+
+		private void AddProgram(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				ProgramPrompt programPrompt = new ProgramPrompt
+				{
+					Owner = this,
+				};
+				programPrompt.Closed += (s, ee) =>
+				{
+					if (programPrompt.PromptSucceeded() && programPrompt.ConfirmClicked)
+					{
+						(string, string) program = programPrompt.GetProgram();
+						ListBoxItem programItem = CreateItem(program.Item1, program.Item2);
+
+						Programs.Items.Add(programItem);
+						List<ListBoxItem> programs = this.programs[currentCategory];
+						programs.Add(programItem);
+						this.programs[currentCategory] = programs;
+
+						config.SetValue(((TextBlock)currentCategory.Content).Text, program.Item1, program.Item2);
+
+						programItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectProgram);
+						programItem.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ModifyProgram);
+					}
+					else
+					{
+						MessageBox.Show("Could not add program because no information was specified.", "No Program Information Given",
+							MessageBoxButton.OK, MessageBoxImage.Error);
+					}
+				};
+				programPrompt.ShowDialog();
+			}
 		}
 
 		protected override void OnStateChanged(EventArgs e)
@@ -182,11 +264,11 @@ namespace App_Launcher
 					writer.WriteLine("Calculator=calc.exe");
 				}
 			}
-			
+
 			config = new Ini(Environment.CurrentDirectory + "\\config.ini");
 
 			string[] categories = config.GetSectionNames();
-			
+
 			foreach (string category in categories)
 			{
 				ListBoxItem categoryItem = CreateCategory(category);
@@ -194,11 +276,13 @@ namespace App_Launcher
 				List<ListBoxItem> programItems = new List<ListBoxItem>();
 
 				categoryItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectCategory);
+				categoryItem.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ModifyCategory);
 
 				foreach (string program in programs)
 				{
 					ListBoxItem programItem = CreateItem(program, config.GetValue(category, program).ToString());
 					programItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectProgram);
+					programItem.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ModifyProgram);
 
 					programItems.Add(programItem);
 				}
@@ -233,6 +317,122 @@ namespace App_Launcher
 				currentCategory = (ListBoxItem)sender;
 
 				LoadPrograms();
+			}
+		}
+
+		private void ModifyProgram(object sender, MouseButtonEventArgs e)
+		{
+			if (e.RightButton == MouseButtonState.Pressed)
+			{
+				Grid grid = (Grid)((ListBoxItem)sender).Content;
+				string name = ((TextBlock)grid.Children[0]).Text;
+				string path = ((TextBlock)grid.Children[1]).Text;
+
+				ProgramPrompt programPrompt = new ProgramPrompt
+				{
+					Owner = this,
+				};
+				programPrompt.SetDefault(name, path);
+				programPrompt.Closed += (s, ee) =>
+				{
+					if (programPrompt.PromptSucceeded() && programPrompt.ConfirmClicked)
+					{
+						(string, string) program = programPrompt.GetProgram();
+						ListBoxItem programItem = CreateItem(program.Item1, program.Item2);
+
+						List<ListBoxItem> programs = this.programs[currentCategory];
+
+						int programIndex = 0;
+						foreach (ListBoxItem tempItem in programs)
+						{
+							string name_ = ((TextBlock)((Grid)tempItem.Content).Children[0]).Text;
+							string path_ = ((TextBlock)((Grid)tempItem.Content).Children[1]).Text;
+
+							if (name_ == name && path_ == path)
+							{
+								programIndex = programs.IndexOf(tempItem);
+							}
+						}
+
+						ChangeEntryName(config, ((TextBlock)currentCategory.Content).Text, name, program.Item1);
+						config.SetValue(((TextBlock)currentCategory.Content).Text, program.Item1, program.Item2);
+
+						programs[programIndex] = programItem;
+						this.programs[currentCategory] = programs;
+						LoadPrograms();
+
+						programItem.PreviewMouseLeftButtonDown += new MouseButtonEventHandler(SelectProgram);
+						programItem.PreviewMouseRightButtonDown += new MouseButtonEventHandler(ModifyProgram);
+					}
+					else
+					{
+						MessageBox.Show("Could not add program because no information was specified.", "No Program Information Given",
+							MessageBoxButton.OK, MessageBoxImage.Error);
+					}
+				};
+				programPrompt.ShowDialog();
+			}
+		}
+
+		private void ModifyCategory(object sender, MouseButtonEventArgs e)
+		{
+			if (e.RightButton == MouseButtonState.Pressed)
+			{
+				string title = ((TextBlock)((ListBoxItem)sender).Content).Text;
+
+				CategoryPrompt categoryPrompt = new CategoryPrompt
+				{
+					Owner = this,
+				};
+				categoryPrompt.SetDefault(title);
+				categoryPrompt.Closed += (s, ee) =>
+				{
+					if (categoryPrompt.PromptSucceeded() && categoryPrompt.ConfirmClicked)
+					{
+						string categoryName = categoryPrompt.GetCategoryName();
+
+						string iniConfig = string.Empty;
+						using (StreamReader reader = new StreamReader(config.Name))
+						{
+							iniConfig = reader.ReadToEnd();
+							iniConfig = iniConfig.Replace($"[{title}]", $"[{categoryName}]");
+
+							reader.Close();
+						}
+
+						File.Delete(config.Name);
+						File.Create(config.Name).Close();
+
+						using (StreamWriter writer = new StreamWriter(config.Name))
+						{
+							writer.Write(iniConfig);
+						}
+
+						MessageBox.Show("The application needs to restart to apply changes to the category list.", "Application Restart Required",
+							MessageBoxButton.OK, MessageBoxImage.Information);
+
+						Process.Start($"{Environment.CurrentDirectory}\\{Assembly.GetExecutingAssembly().GetName().Name}.exe");
+						Application.Current.Shutdown();
+					}
+					else
+					{
+						MessageBox.Show("Could not add category because no information was specified.", "No Category Information Given",
+							MessageBoxButton.OK, MessageBoxImage.Error);
+					}
+				};
+				categoryPrompt.ShowDialog();
+			}
+		}
+
+		private void ChangeEntryName(Ini config, string section, string entry, string newEntry)
+		{
+			foreach (string entry_ in config.GetEntryNames(section))
+			{
+				bool newEntry_ = entry_ == entry;
+				string value = config.GetValue(section, entry_).ToString();
+
+				config.RemoveEntry(section, entry_);
+				config.SetValue(section, newEntry_ ? newEntry : entry_, value);
 			}
 		}
 	}
