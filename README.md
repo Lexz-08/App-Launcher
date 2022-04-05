@@ -46,11 +46,12 @@ This example here will create 2 different categories each with a pair of 2 diffe
       - Selects a different category of programs in the launcher.
     - **Program**
       - Launches the selected program in the current category in the launcher.
-  - `Mouse Right-Click`
-    - **Category**
-      - Opens a prompt where you enter a category name or leave the input alone, and confirming will change the name of the selected category in the launcher.
-    - **Program**
-      - Opens a prompt where you enter a program name and path or leave an of the inputs alone, and confirming will modify the selected program in the current category in the launcher.
+  - `Mouse Right-Click` ***-Opens a [ContextMenu](https://docs.microsoft.com/en-us/dotnet/desktop/wpf/controls/contextmenu?view=netframeworkdesktop-4.8)-***
+    - ***Modify***
+      - Opens a category/program info prompt for modifying the selected category or prompt.
+      - ***Modifying a category no longer requires a restart of the application.***
+    - ***Remove***
+      - Simply removes the selected category/program from the launcher and the .ini file configuration.
 
 ### Download
 [Standalone](https://github.com/Lexz-08/App-Launcher/releases/download/1.0/Standalone.zip)
