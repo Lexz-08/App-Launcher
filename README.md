@@ -56,4 +56,4 @@ This example here will create 2 different categories each with a pair of 2 diffe
       - Simply removes the selected category/program from the launcher and the .ini file configuration.
 
 ### Download
-[Standalone](https://github.com/Lexz-08/App-Launcher/releases/download/1.1.5/Standalone.zip)
+[Standalone](https://github.com/Lexz-08/App-Launcher/releases/download/1.2/Standalone.zip)
