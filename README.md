@@ -37,6 +37,8 @@ Example 4=C:\example4_program.exe
 This example here will create 2 different categories each with a pair of 2 different "example programs".
 
 ### Controls
+  - `View File in Explorer`
+    - Opens `File Explorer` with the folder containing the .ini config file **(which stays with the program at all times)** already viewed
   - `Add Category`
     - Opens a prompt where you enter a category name, and confirming will create a new, empty category in the launcher.
   - `Add Program`
