@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,6 +67,14 @@ namespace App_Launcher
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
 				WindowState = WindowState.Minimized;
+		}
+
+		private void ViewInExplorer(object sender, MouseButtonEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				Process.Start("explorer.exe", Path.GetDirectoryName(config.Name));
+			}
 		}
 
 		private void AddCategory(object sender, MouseButtonEventArgs e)

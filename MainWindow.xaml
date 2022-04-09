@@ -33,6 +33,7 @@
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="130" />
 						<ColumnDefinition Width="100" />
 						<ColumnDefinition Width="100" />
 						<ColumnDefinition Width="30" />
@@ -46,10 +47,21 @@
 						   Margin="8,0,0,0"
 						   VerticalAlignment="Center"/>
 
-					<Button Content="Add Category"
+					<Button Content="View File in Explorer"
 							FontFamily="Segoe UI"
 							FontSize="12"
 							Grid.Column="1"
+							Cursor="Hand"
+							Focusable="False"
+							Background="Transparent"
+							BorderThickness="0"
+							ToolTip="Open the folder containing the configuration file in File Explorer"
+							PreviewMouseLeftButtonDown="ViewInExplorer"/>
+
+					<Button Content="Add Category"
+							FontFamily="Segoe UI"
+							FontSize="12"
+							Grid.Column="2"
 							Cursor="Hand"
 							Focusable="False"
 							Background="Transparent"
@@ -60,7 +72,7 @@
 					<Button Content="Add Program"
 							FontFamily="Segoe UI"
 							FontSize="12"
-							Grid.Column="2"
+							Grid.Column="3"
 							Cursor="Hand"
 							Focusable="False"
 							Background="Transparent"
@@ -71,7 +83,7 @@
 					<Button Content="0"
 							FontFamily="Webdings"
 							FontSize="12"
-							Grid.Column="3"
+							Grid.Column="4"
 							Cursor="Hand"
 							Focusable="False"
 							Background="Transparent"
@@ -83,7 +95,7 @@
 							Content="1"
 							FontFamily="Webdings"
 							FontSize="12"
-							Grid.Column="4"
+							Grid.Column="5"
 							Cursor="Hand"
 							Focusable="False"
 							Background="Transparent"
@@ -94,7 +106,7 @@
 					<Button Content="r"
 							FontFamily="Webdings"
 							FontSize="12"
-							Grid.Column="5"
+							Grid.Column="6"
 							Cursor="Hand"
 							Focusable="False"
 							Background="Transparent"
